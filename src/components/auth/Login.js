@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
@@ -11,6 +13,9 @@ import AuthService from './service/AuthService';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    if (AuthService.isAuthenticated()) return <Navigate to="/" replace />;
 
     return (
         <AuthForm rendering={
@@ -36,7 +41,8 @@ const Login = () => {
                     </Grid>
                     <Grid container justifyContent="flex-end">
                         <CardActions>
-                            <Button variant="contained" onClick={e => AuthService.login(username, password)}>Sign In</Button>
+                            <Button variant="contained" onClick={() => 
+                                AuthService.login(username, password).then(() => navigate("/"))}>Sign In</Button>
                         </CardActions>
                     </Grid>
                 </CardContent>
